@@ -15,8 +15,8 @@ jobs:
     - name: Set up Python 3.11 with pip cache
       uses: actions/setup-python@v3
       with:
-        python-version: "3.12"
-        cache: false
+        python-version: "3.11"
+        cache: pip3
         cache-dependency-path: ./requirements.txt
 
     # 3. Chrome 설치
