@@ -1,0 +1,50 @@
+name: Naver Paper Python GitHub Actions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-naver-paper:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 저장소 체크아웃
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Python 3.11 + pip 캐시 설정
+    - name: Set up Python 3.11 with pip cache
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+        cache: pip
+        cache-dependency-path: requirements.txt
+
+    # 3. Chrome 설치
+    - name: Install Google Chrome
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt-get update
+        sudo apt-get install -y gdebi-core
+        sudo gdebi -n google-chrome-stable_current_amd64.deb
+
+    # 4. Python 의존성 설치
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 5. 스크립트 실행
+    - name: Run script
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        CREDENTIALENV: ${{ secrets.CREDENTIALENV }}
+      run: |
+        mkdir -p ~/.naver
+        cat <<EOF > ~/.naver/credentials
+[default]
+username = $USERNAME
+password = $PASSWORD
+EOF
+        python run_new.py
