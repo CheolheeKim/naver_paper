@@ -100,7 +100,8 @@ def init(id, pwd, ua, mobile_device, headless, newsave):
         time.sleep(1)
 
     # 입력을 완료하면 로그인 버튼 클릭
-    driver2.find_element(By.CLASS_NAME, "btn_login").click()
+    pw.send_keys(Keys.Enter)
+#    driver2.find_element(By.CLASS_NAME, "btn_login").click()
     time.sleep(1)
 
     # new.save 등록
