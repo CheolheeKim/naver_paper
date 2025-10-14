@@ -45,8 +45,8 @@ jobs:
         run: |
           # CREDENTIALENV 시크릿을 파일에 쓰는 것이 목적일 경우
           # 필요 없다면 이 두 줄은 삭제하세요.
-          mkdir -p ~/.naver
-          echo "${{ secrets.CREDENTIALENV }}" > ~/.naver/credentials
+#          mkdir -p ~/.naver
+#          echo "${{ secrets.CREDENTIALENV }}" > ~/.naver/credentials
           
           # 파이썬 스크립트 실행
           python run_new.py
