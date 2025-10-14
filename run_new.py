@@ -85,30 +85,10 @@ def init(id, pwd, ua, mobile_device, headless, newsave):
 
     # --- 여기가 핵심 수정 부분 ---
     # 1. 현재 포커스된 요소(비밀번호 필드)를 active_element 변수에 저장
-    active_element = driver2.switch_to.active_element
+#    active_element = driver2.switch_to.active_element
 
     # 2. active_element에 비밀번호 값을 입력
-    driver2.execute_script("arguments[0].value = arguments[1]", active_element, input_pw)
-    time.sleep(1)
-
-    # Enable Stay Signed in
-    if not driver2.find_element(By.CLASS_NAME, "input_keep").is_selected():
-        driver2.find_element(By.CLASS_NAME, "keep_text").click()
-        time.sleep(1)
-
-    # Enable IP Security
-    if not driver2.find_element(By.CLASS_NAME, "switch_checkbox").is_selected():
-        driver2.find_element(By.CLASS_NAME, "switch_btn").click()
-        time.sleep(1)
-
-    # 3. 비밀번호가 입력된 active_element에 Enter 키를 전송하여 로그인
-    active_element.send_keys(Keys.ENTER)
-    time.sleep(1)    
- 
-    
-#    username.send_keys(Keys.TAB)
-#    pw.click()
-#    driver2.execute_script("arguments[0].value = arguments[1]", pw, input_pw)
+#    driver2.execute_script("arguments[0].value = arguments[1]", active_element, input_pw)
 #    time.sleep(1)
 
     # Enable Stay Signed in
@@ -121,10 +101,30 @@ def init(id, pwd, ua, mobile_device, headless, newsave):
 #        driver2.find_element(By.CLASS_NAME, "switch_btn").click()
 #        time.sleep(1)
 
-    # 입력을 완료하면 로그인 버튼 클릭
+    # 3. 비밀번호가 입력된 active_element에 Enter 키를 전송하여 로그인
 #    active_element.send_keys(Keys.ENTER)
-#    driver2.find_element(By.CLASS_NAME, "btn_login").click()
-#    time.sleep(1)
+#    time.sleep(1)    
+ 
+    
+#    username.send_keys(Keys.TAB)
+    pw.click()
+    driver2.execute_script("arguments[0].value = arguments[1]", pw, input_pw)
+    time.sleep(1)
+
+    # Enable Stay Signed in
+    if not driver2.find_element(By.CLASS_NAME, "input_keep").is_selected():
+        driver2.find_element(By.CLASS_NAME, "keep_text").click()
+        time.sleep(1)
+
+    # Enable IP Security
+    if not driver2.find_element(By.CLASS_NAME, "switch_checkbox").is_selected():
+        driver2.find_element(By.CLASS_NAME, "switch_btn").click()
+        time.sleep(1)
+
+    # 입력을 완료하면 로그인 버튼 클릭
+    active_element.send_keys(Keys.ENTER)
+    driver2.find_element(By.CLASS_NAME, "btn_login").click()
+    time.sleep(1)
 
     # new.save 등록
     # new.dontsave 등록 안함
