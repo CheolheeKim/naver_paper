@@ -82,7 +82,9 @@ def init(id, pwd, ua, mobile_device, headless, newsave):
     driver2.execute_script("arguments[0].value = arguments[1]", username, input_id)
     time.sleep(1)
 
-    pw.click()
+    
+    username.send_keys(Keys.TAB)
+#    pw.click()
     driver2.execute_script("arguments[0].value = arguments[1]", pw, input_pw)
     time.sleep(1)
 
