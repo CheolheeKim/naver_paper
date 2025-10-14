@@ -100,7 +100,7 @@ def init(id, pwd, ua, mobile_device, headless, newsave):
         time.sleep(1)
 
     # 입력을 완료하면 로그인 버튼 클릭
-    pw.send_keys(Keys.Enter)
+    active_element.send_keys(Keys.ENTER)
 #    driver2.find_element(By.CLASS_NAME, "btn_login").click()
     time.sleep(1)
 
