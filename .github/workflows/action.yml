@@ -1,34 +1,52 @@
 name: Naver Paper Python GitHub Actions
+
 on:
+  # 수정 1: schedule과 workflow_dispatch는 동일한 레벨이어야 합니다.
   workflow_dispatch:
-  # schedule:
-  #   - cron: '*/30 * * * *'
+  schedule:
+    - cron: '*/30 * * * *'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-        cache: 'pip' # caching pip dependencies
-    - name: Install dependencies
-      run: |
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt-get update
-        sudo apt-get install -y gdebi-core
-        sudo gdebi google-chrome-stable_current_amd64.deb        
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run
-      run: |
-        mkdir -p ~/.naver
-        echo "[default]" > ~/.naver/credentials
-        echo "username = " $USERNAME >> ~/.naver/credentials
-        echo "password = " $PASSWORD >> ~/.naver/credentials
-        python run_new.py
-      env:
-        USERNAME: ${{ secrets.USERNAME }} # secret에 저장된 내용을 불러옴
-        PASSWORD: ${{ secrets.PASSWORD }}
-        CREDENTIALENV : ${{ secrets.CREDENTIALENV }}
+      # 수정 2: checkout은 한 번만 사용합니다. 최신 버전 v4 사용을 권장합니다.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Python 3.11 + pip 캐시 설정
+      # 참고: 최신 버전 v5 사용을 권장합니다.
+      # 이 스텝이 성공하려면 저장소에 requirements.txt 파일이 반드시 있어야 합니다.
+      - name: Set up Python 3.11 with pip cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      # Chrome 설치
+      - name: Install Google Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get update
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+      # Python 의존성 설치
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 수정 3: 스크립트 실행 로직 수정
+      - name: Run script
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          CREDENTIALENV: ${{ secrets.CREDENTIALENV }}
+        run: |
+          # CREDENTIALENV 시크릿을 파일에 쓰는 것이 목적일 경우
+          # 필요 없다면 이 두 줄은 삭제하세요.
+          mkdir -p ~/.naver
+          echo "${{ secrets.CREDENTIALENV }}" > ~/.naver/credentials
+          
+          # 파이썬 스크립트 실행
+          python run_new.py
